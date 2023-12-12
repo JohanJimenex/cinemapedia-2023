@@ -6,6 +6,6 @@ import 'package:cinemapedia/domain/entities/movie.dart';
 abstract class MovieDataSource {
   //Se dfinen que metodos deben tener quienes implementen esta clase
 
-  //peidmos peliculas en cartelera, acutales
+  //pedimos peliculas en cartelera, acutales
   Future<List<Movie>> getNowPlaying({int page = 1});
 }

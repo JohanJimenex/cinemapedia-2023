@@ -1,4 +1,6 @@
+import 'package:cinemapedia/config/constant/enviroment_const.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomeScreen extends StatelessWidget {
   final String nameOfScreen = "HomeScreen";
@@ -9,8 +11,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("HomeScreen"),
-      ),
+          child:
+              // Text(dotenv.env["THE_MOVIEDB_API_KEY"] ?? "No existe API KEY"), se cambio por una clase y constante para usar el .nombrePropiedad
+              Text(Enviroment.theMovieDBAPIKey)),
     );
   }
 }
