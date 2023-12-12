@@ -1,5 +1,8 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
 
+//El reposotirio es quein llama al Datasource
+// porque en el repositorio podemos cambiar el datasource
+
 //usamos una clase abstracta para definir las reglas que tendra quien implemente clase, que serian las impleemntacinoes de Datasources
 
 abstract class MovieDataRepository {
