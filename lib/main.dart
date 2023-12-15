@@ -3,13 +3,15 @@ import 'package:cinemapedia/config/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   // instalar el packete flutter_dotenv.dart y configurar en assets en el pupspec.yaml
   // para usarlo : dotenv.env['nombre_variable'] ?? "no existe variable"
   await dotenv.load(fileName: ".env");
 
-  runApp(const MyApp());
+  //El clase ProviderScope es para configurar el manejador de estado de RiverPod
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

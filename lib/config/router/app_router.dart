@@ -4,8 +4,8 @@ import 'package:cinemapedia/presentation/screens/barril_screens.dart';
 final appRouter = GoRouter(initialLocation: "/homeScreen", routes: [
   GoRoute(
     path: "/homeScreen", //ruta
-    name: const HomeScreen()
+    name: HomeScreen()
         .nameOfScreen, //nombre de la ruta para poder llamarla por nombre
-    builder: (context, state) => const HomeScreen(), //Componente a cargar
+    builder: (context, state) => HomeScreen(), //Componente a cargar
   ),
 ]);
