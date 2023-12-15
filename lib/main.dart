@@ -6,11 +6,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
-  // instalar el packete flutter_dotenv.dart y configurar en assets en el pupspec.yaml
+  // instalar el paquete flutter_dotenv.dart y configurar en assets en el pupspec.yaml
   // para usarlo : dotenv.env['nombre_variable'] ?? "no existe variable"
   await dotenv.load(fileName: ".env");
 
-  //El clase ProviderScope es para configurar el manejador de estado de RiverPod
+  //La clase ProviderScope es para configurar el manejador de estado de RiverPod
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter,
-      title: 'Flutter Demo',
+      title: 'Cinemapedie',
       theme: AppTheme().getTheme(),
     );
   }
