@@ -1,5 +1,6 @@
 // import 'dart:math';
 
+import 'package:cinemapedia/presentation/widgets/barril_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/providers/barril_providers.dart';
@@ -34,12 +35,19 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
       // body: Center(child: Text(dotenv.env["THE_MOVIEDB_API_KEY"] ?? "No existe API KEY")),// , se cambio por una clase y constante para usar el .nombrePropiedad
       body: moviesOnCartelera.isEmpty
           ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: moviesOnCartelera.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                    title: Text(moviesOnCartelera[index].title));
-              },
+          : Column(
+              children: [
+                const CustomAppbar(),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: moviesOnCartelera.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                          title: Text(moviesOnCartelera[index].title));
+                    },
+                  ),
+                ),
+              ],
             ),
     );
   }
