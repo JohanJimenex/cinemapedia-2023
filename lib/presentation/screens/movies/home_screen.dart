@@ -1,6 +1,7 @@
 // import 'dart:math';
 
 import 'package:cinemapedia/presentation/widgets/barril_widgets.dart';
+import 'package:cinemapedia/presentation/widgets/movies/movie_slidershow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/providers/barril_providers.dart';
@@ -32,21 +33,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       // body: Center(child: Text(Enviroment.theMovieDBAPIKey)),
-      // body: Center(child: Text(dotenv.env["THE_MOVIEDB_API_KEY"] ?? "No existe API KEY")),// , se cambio por una clase y constante para usar el .nombrePropiedad
+      //se cambio por una clase y constante para usar el .nombrePropiedad
+      // body: Center(child: Text(dotenv.env["THE_MOVIEDB_API_KEY"] ?? "No existe API KEY")),// ,
       body: moviesOnCartelera.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
                 const CustomAppbar(),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: moviesOnCartelera.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                          title: Text(moviesOnCartelera[index].title));
-                    },
-                  ),
-                ),
+                MovieSlidershow(moviesToShow: moviesOnCartelera)
               ],
             ),
     );
