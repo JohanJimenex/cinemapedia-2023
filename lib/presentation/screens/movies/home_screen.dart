@@ -1,9 +1,9 @@
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/providers/barril_providers.dart';
-import 'package:cinemapedia/config/constant/enviroment_const.dart';
+// import 'package:cinemapedia/config/constant/enviroment_const.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 //Convertimos un StefulWidget a un ConsumeStefulWidget de Riverpod,
