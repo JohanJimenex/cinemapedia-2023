@@ -17,7 +17,7 @@ class MovieSlidershow extends StatelessWidget {
       // width: double.infinity,
       child: Swiper(
         itemCount: moviesToShow.length,
-        scale: 0.8,
+        scale: 0.9,
         viewportFraction: 0.8,
         autoplay: true,
         pagination: SwiperPagination(

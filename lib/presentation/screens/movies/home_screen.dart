@@ -43,6 +43,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 MovieSlidershow(moviesToShow: moviesOnCartelera)
               ],
             ),
+
+      bottomNavigationBar: const CustomNavigationbar(),
     );
   }
 }
