@@ -1,7 +1,9 @@
 // import 'dart:math';
 
 import 'package:cinemapedia/presentation/widgets/barril_widgets.dart';
+import 'package:cinemapedia/presentation/widgets/movies/movie_horizontal_listview.dart';
 import 'package:cinemapedia/presentation/widgets/movies/movie_slidershow.dart';
+import 'package:cinemapedia/providers/movies/movies_swiper_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/providers/barril_providers.dart';
@@ -29,19 +31,59 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final moviesOnCarteleraForSwiper = ref.watch(moviesForSwiperProvider);
     final moviesOnCartelera = ref.watch(nowPlayingMoviesProvider);
+    final colorsTheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       // body: Center(child: Text(Enviroment.theMovieDBAPIKey)),
       //se cambio por una clase y constante para usar el .nombrePropiedad
       // body: Center(child: Text(dotenv.env["THE_MOVIEDB_API_KEY"] ?? "No existe API KEY")),// ,
-      body: moviesOnCartelera.isEmpty
+      body: moviesOnCarteleraForSwiper.isEmpty
           ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                const CustomAppbar(),
-                MovieSlidershow(moviesToShow: moviesOnCartelera)
-              ],
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  const CustomAppbar(),
+                  MovieSlidershow(
+                      moviesToShow: moviesOnCarteleraForSwiper),
+                  const Divider(
+                    height: 20,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Peliculas en cartelera",
+                          style: textTheme.headlineSmall,
+                        ),
+                        const Spacer(),
+                        FilledButton(
+                            onPressed: () {},
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                                  colorsTheme
+                                      .primary), // Cambia el color del ícono aquí
+                            ),
+                            child: const Text('Lunes 1')),
+                      ],
+                    ),
+                  ),
+                  MovieHorizontalListView(
+                    movies: moviesOnCartelera,
+                    loadMoreMovies: () {
+                      //Cargar mas peliculas
+                      ref
+                          .read(nowPlayingMoviesProvider.notifier)
+                          .loadNextPage();
+                    },
+                  ),
+                ],
+              ),
             ),
 
       bottomNavigationBar: const CustomNavigationbar(),

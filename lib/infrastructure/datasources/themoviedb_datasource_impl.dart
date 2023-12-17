@@ -17,8 +17,11 @@ class TheMovieDBDataSourceImpl extends MoviesDataSource {
 
   @override // Para hacer polimorfismo
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
-    Uri url = Uri.https(urlBase, Endpoints.getMovie,
-        {"api_key": Enviroment.theMovieDBAPIKey, "language": "es-MX"});
+    Uri url = Uri.https(urlBase, Endpoints.getMovie, {
+      "api_key": Enviroment.theMovieDBAPIKey,
+      "language": "es-MX",
+      "page": page.toString()
+    });
 
     final resp = await http.get(url);
     final respJson = json.decode(resp.body);

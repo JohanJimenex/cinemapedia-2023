@@ -8,7 +8,7 @@ class MovieMapper {
       adult: movieDbModel.adult,
       backdropPath: movieDbModel.backdropPath != ""
           ? "https://image.tmdb.org/t/p/w500/${movieDbModel.backdropPath}"
-          : "assets/images/no-image.jpeg",
+          : "",
       //se espera una lista de String y viene una lista d eInt, iteramos para convertirlos a String y luego el Iterable a una Lista
       genreIds: movieDbModel.genreIds.map((e) => e.toString()).toList(),
       id: movieDbModel.id,
@@ -25,7 +25,7 @@ class MovieMapper {
       voteAverage: movieDbModel.voteAverage,
       voteCount: movieDbModel.voteCount);
 
-  //otro mapper
+  //otro mapper par aNetfliz por ejemplo
   // static Movie movieNetflixModelToEntity(MovieNetflix movieNetflix) => Movie(
   // adult: movieNetflix.adult,
   // backdropPath: movieNetflix.backdropPath != ""

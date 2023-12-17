@@ -27,7 +27,6 @@ class MovieSlidershow extends StatelessWidget {
                 color: Colors.black12)),
         itemBuilder: (BuildContext context, int index) {
           final Movie movie = moviesToShow[index];
-
           return Padding(
             padding: const EdgeInsets.only(bottom: 30),
             child: DecoratedBox(
@@ -41,17 +40,24 @@ class MovieSlidershow extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   child: FadeIn(
                     //Animacion de animate_do
-                    child: Image.network(
-                      movie.backdropPath,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress != null) {
-                          //viene el porcentaje de carga, y != null significa que esta cargando aun
-                          return Center(child: Text("Cargando"));
-                        }
-                        return child;
-                      },
-                    ),
+                    child: movie.backdropPath == ""
+                        ? Image.asset(
+                            "assets/images/no-image.jpeg",
+                            fit: BoxFit.cover,
+                          )
+                        : Image.network(
+                            movie.backdropPath,
+                            fit: BoxFit.cover,
+                            loadingBuilder:
+                                (context, child, loadingProgress) {
+                              if (loadingProgress != null) {
+                                //viene el porcentaje de carga, y != null significa que esta cargando aun
+                                return const Center(
+                                    child: Text("Cargando"));
+                              }
+                              return child;
+                            },
+                          ),
                   )),
             ),
           );

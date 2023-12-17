@@ -28,6 +28,7 @@ class MoviesNotifier extends StateNotifier<List<Movie>> {
     final List<Movie> movies = await fetchMoreMovies(page: currentPage);
     // usando el 'ref' por parametros pero entonces solo podra usar este metodo con ese proveedor
     //state actualmente lo definimos con un arreglo vacio en el oncstructor con super()
+    print("mor movies");
     // state.addAll(movies);
     state = [...state, ...movies]; //ni puta idea T.T
   }
