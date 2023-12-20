@@ -33,4 +33,22 @@ class NetflixDatasource extends MoviesDataSource {
     // return listMovieDb;
     return [];
   }
+
+  @override
+  Future<List<Movie>> getPopularMovies({int page = 1}) {
+    //   implement getPopularMovies
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Movie>> getTopRatedMovies({int page = 1}) {
+    //  implement getTopRatedMovies
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Movie>> getUpComingMovies({int page = 1}) {
+    //   implement getUpComingMovies
+    throw UnimplementedError();
+  }
 }

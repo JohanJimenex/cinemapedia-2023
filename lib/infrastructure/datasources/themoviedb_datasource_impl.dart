@@ -17,7 +17,64 @@ class TheMovieDBDataSourceImpl extends MoviesDataSource {
 
   @override // Para hacer polimorfismo
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
-    Uri url = Uri.https(urlBase, Endpoints.getMovie, {
+    Uri url = Uri.https(urlBase, Endpoints.getMoviesOnCartelera, {
+      "api_key": Enviroment.theMovieDBAPIKey,
+      "language": "es-MX",
+      "page": page.toString()
+    });
+
+    final resp = await http.get(url);
+    final respJson = json.decode(resp.body);
+    final movieDbResponse = MovieDbResponse.fromJson(respJson);
+    final List<Movie> listMovieDb = movieDbResponse.results
+        // .where((movieDb) => movieDb.adult != true)
+        .map((e) => MovieMapper.movieDBModelToEntity(e))
+        .toList();
+
+    return listMovieDb;
+  }
+
+  @override
+  Future<List<Movie>> getPopularMovies({int page = 1}) async {
+    Uri url = Uri.https(urlBase, Endpoints.getPopularMovies, {
+      "api_key": Enviroment.theMovieDBAPIKey,
+      "language": "es-MX",
+      "page": page.toString()
+    });
+
+    final resp = await http.get(url);
+    final respJson = json.decode(resp.body);
+    final movieDbResponse = MovieDbResponse.fromJson(respJson);
+    final List<Movie> listMovieDb = movieDbResponse.results
+        // .where((movieDb) => movieDb.adult != true)
+        .map((e) => MovieMapper.movieDBModelToEntity(e))
+        .toList();
+
+    return listMovieDb;
+  }
+
+  @override
+  Future<List<Movie>> getTopRatedMovies({int page = 1}) async {
+    Uri url = Uri.https(urlBase, Endpoints.getTopRatedMovies, {
+      "api_key": Enviroment.theMovieDBAPIKey,
+      "language": "es-MX",
+      "page": page.toString()
+    });
+
+    final resp = await http.get(url);
+    final respJson = json.decode(resp.body);
+    final movieDbResponse = MovieDbResponse.fromJson(respJson);
+    final List<Movie> listMovieDb = movieDbResponse.results
+        // .where((movieDb) => movieDb.adult != true)
+        .map((e) => MovieMapper.movieDBModelToEntity(e))
+        .toList();
+
+    return listMovieDb;
+  }
+
+  @override
+  Future<List<Movie>> getUpComingMovies({int page = 1}) async {
+    Uri url = Uri.https(urlBase, Endpoints.getUpComingMovies, {
       "api_key": Enviroment.theMovieDBAPIKey,
       "language": "es-MX",
       "page": page.toString()

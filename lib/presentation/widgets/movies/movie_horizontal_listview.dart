@@ -72,18 +72,24 @@ class _MovieHorizontalListViewState
                         height: 200,
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              movie.posterPath,
-                              fit: BoxFit.cover,
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress != null) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                }
-                                return child;
-                              },
-                            )),
+                            child: movie.posterPath == ""
+                                ? Image.asset(
+                                    "assets/images/no-image.jpeg",
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.network(
+                                    movie.posterPath,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress != null) {
+                                        return const Center(
+                                            child:
+                                                CircularProgressIndicator());
+                                      }
+                                      return child;
+                                    },
+                                  )),
                       ),
                       SizedBox(
                         width: 150,
@@ -109,7 +115,7 @@ class _MovieHorizontalListViewState
                                   ?.copyWith(color: Colors.amber[700]),
                             ),
                             const Spacer(),
-                            Text(convertToK(movie.popularity))
+                            Text(shortNumberToK(movie.popularity))
                           ],
                         ),
                       ),
@@ -122,7 +128,7 @@ class _MovieHorizontalListViewState
   }
 }
 
-String convertToK(double valor) {
+String shortNumberToK(double valor) {
   if (valor >= 1000) {
     double valorEnK = valor / 1000;
     return '${valorEnK.toStringAsFixed(2)}k';

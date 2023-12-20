@@ -9,12 +9,37 @@ final nowPlayingMoviesProvider =
   return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
 });
 
-//typedef
+final popularMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies =
+      ref.watch(movieRepositoryProvider).getPopularMovies;
+
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
+
+final topRatedMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies =
+      ref.watch(movieRepositoryProvider).getTopRatedMovies;
+
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
+
+final upComingMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies =
+      ref.watch(movieRepositoryProvider).getUpComingMovies;
+
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
+
+//typedef es como una  un interface
 typedef MovieCallback = Future<List<Movie>> Function({int page});
 
 //Esto es exclusivo de RiverPod para manejar los estados de los providers, hay una alternativa
 class MoviesNotifier extends StateNotifier<List<Movie>> {
   int currentPage = 0;
+  bool _isLoading = false;
   MovieCallback fetchMoreMovies;
 
   //se inicia con un arreglo vacio al menos que cargues previamente una data del localstorare
@@ -25,11 +50,19 @@ class MoviesNotifier extends StateNotifier<List<Movie>> {
   Future<void> loadNextPage() async {
     currentPage++;
 
+    if (_isLoading) return;
+    _isLoading = true;
+
     final List<Movie> movies = await fetchMoreMovies(page: currentPage);
+
     // usando el 'ref' por parametros pero entonces solo podra usar este metodo con ese proveedor
     //state actualmente lo definimos con un arreglo vacio en el oncstructor con super()
-    print("mor movies");
     // state.addAll(movies);
-    state = [...state, ...movies]; //ni puta idea T.T
+    // agregamos un nuevo arreglo con spread operator, le emtoemos el que ya tiene , mas otro arreglo, , podemos agregar mas
+    state = [...state, ...movies];
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    _isLoading = false;
   }
 }
