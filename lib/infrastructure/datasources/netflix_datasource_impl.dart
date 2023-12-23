@@ -51,4 +51,10 @@ class NetflixDatasource extends MoviesDataSource {
     //   implement getUpComingMovies
     throw UnimplementedError();
   }
+
+  @override
+  Future<Movie> getMovieDetails(String movieId) {
+    //   implement getMovieDetails
+    throw UnimplementedError();
+  }
 }

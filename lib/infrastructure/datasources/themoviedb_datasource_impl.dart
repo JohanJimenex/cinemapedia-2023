@@ -9,6 +9,7 @@ import 'package:cinemapedia/config/constant/enviroment_const.dart';
 import 'package:cinemapedia/domain/datasources/movies_datasource.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/infrastructure/mappers/movie_mapper.dart';
+import 'package:cinemapedia/infrastructure/models/moviedb/movie_details_repsonse.dart';
 import 'package:cinemapedia/infrastructure/models/moviedb/moviedb_response.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,7 +23,6 @@ class TheMovieDBDataSourceImpl extends MoviesDataSource {
       "language": "es-MX",
       "page": page.toString()
     });
-
     final resp = await http.get(url);
     final respJson = json.decode(resp.body);
     final movieDbResponse = MovieDbResponse.fromJson(respJson);
@@ -89,5 +89,24 @@ class TheMovieDBDataSourceImpl extends MoviesDataSource {
         .toList();
 
     return listMovieDb;
+  }
+
+  @override
+  Future<Movie> getMovieDetails(String movieId) async {
+    Uri url = Uri.https(
+        urlBase,
+        Endpoints.getMovieDetails.replaceFirst("{movieId}", movieId),
+        {"api_key": Enviroment.theMovieDBAPIKey, "language": "es-MX"});
+
+    final resp = await http.get(url);
+    // if code != 200 navegar a otra ruta, ?
+    final Map<String, dynamic> respJson = json.decode(resp.body);
+
+    final MovieDetailsResponse movieDetails =
+        MovieDetailsResponse.fromJson(respJson);
+    final Movie movie =
+        MovieMapper.movieDBDetailsModelToEntity(movieDetails);
+
+    return movie;
   }
 }

@@ -1,6 +1,7 @@
 //El objetivo de este mapper/clase, es leer diferentes modelos y crear/mapearlos con nuestra entidad
 //LA idea es crear un mapper para cada modelo diferente, si viene de moviedb, netflixdb u otro poder mapear cada uno con nuestra entidad
 import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/infrastructure/models/moviedb/movie_details_repsonse.dart';
 import 'package:cinemapedia/infrastructure/models/moviedb/movie_moviedb.dart';
 
 class MovieMapper {
@@ -24,6 +25,32 @@ class MovieMapper {
       video: movieDbModel.video,
       voteAverage: movieDbModel.voteAverage,
       voteCount: movieDbModel.voteCount);
+
+  static Movie movieDBDetailsModelToEntity(
+      MovieDetailsResponse movieDetails) {
+    Movie movieDB = Movie(
+        adult: movieDetails.adult,
+        backdropPath: movieDetails.backdropPath != ""
+            ? "https://image.tmdb.org/t/p/w500/${movieDetails.backdropPath}"
+            : "",
+        genreIds:
+            movieDetails.genres.map((e) => e.name.toString()).toList(),
+        id: movieDetails.id,
+        originalLanguage: movieDetails.originalLanguage,
+        originalTitle: movieDetails.originalTitle,
+        overview: movieDetails.overview,
+        popularity: movieDetails.popularity,
+        posterPath: movieDetails.posterPath != ""
+            ? "https://image.tmdb.org/t/p/w500/${movieDetails.posterPath}"
+            : "",
+        releaseDate: movieDetails.releaseDate,
+        title: movieDetails.title,
+        video: movieDetails.video,
+        voteAverage: movieDetails.voteAverage,
+        voteCount: movieDetails.voteCount);
+
+    return movieDB;
+  }
 
   //otro mapper par aNetfliz por ejemplo
   // static Movie movieNetflixModelToEntity(MovieNetflix movieNetflix) => Movie(

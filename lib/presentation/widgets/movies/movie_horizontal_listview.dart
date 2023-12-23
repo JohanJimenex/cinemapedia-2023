@@ -1,5 +1,6 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MovieHorizontalListView extends StatefulWidget {
   final List<Movie> movies;
@@ -24,6 +25,7 @@ class _MovieHorizontalListViewState
   final scrollController = ScrollController();
 
   bool loadMore = true;
+
   @override
   void initState() {
     super.initState();
@@ -67,29 +69,35 @@ class _MovieHorizontalListViewState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: 150,
-                        height: 200,
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: movie.posterPath == ""
-                                ? Image.asset(
-                                    "assets/images/no-image.jpeg",
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.network(
-                                    movie.posterPath,
-                                    fit: BoxFit.cover,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress != null) {
-                                        return const Center(
-                                            child:
-                                                CircularProgressIndicator());
-                                      }
-                                      return child;
-                                    },
-                                  )),
+                      GestureDetector(
+                        onTap: () {
+                          // context.push("/movieDetailsScreen/${movie.id}", extra: movie); //enviar objeto
+                          context.push("/movieDetailsScreen/${movie.id}");
+                        },
+                        child: SizedBox(
+                          width: 150,
+                          height: 200,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: movie.posterPath == ""
+                                  ? Image.asset(
+                                      "assets/images/no-image.jpeg",
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.network(
+                                      movie.posterPath,
+                                      fit: BoxFit.cover,
+                                      loadingBuilder: (context, child,
+                                          loadingProgress) {
+                                        if (loadingProgress != null) {
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        }
+                                        return child;
+                                      },
+                                    )),
+                        ),
                       ),
                       SizedBox(
                         width: 150,

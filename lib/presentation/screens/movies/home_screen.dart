@@ -15,7 +15,7 @@ import 'package:cinemapedia/providers/barril_providers.dart';
 //as podemos usar la el metodo iniState() para inciializar cosas, ademas poder usar la variable "ref" sin tener que pasarlo por el build "WidgetRef ref" ,
 // pudieramos usar la otra fomra de ConsumerWidget parta StalessWidget pero tendriamos que pasarle la referencia por el build(context, ref)
 class HomeScreen extends ConsumerStatefulWidget {
-  final String nameOfScreen = "HomeScreen";
+  static String nameOfScreen = "HomeScreen";
 
   const HomeScreen({super.key});
 
