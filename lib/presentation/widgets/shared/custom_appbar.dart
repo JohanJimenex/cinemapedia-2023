@@ -1,11 +1,14 @@
+import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/providers/barril_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class CustomAppbar extends StatelessWidget {
+class CustomAppbar extends ConsumerWidget {
   const CustomAppbar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
     final textStyle = Theme.of(context).textTheme;
 
@@ -26,10 +29,18 @@ class CustomAppbar extends StatelessWidget {
       actions: [
         IconButton(
             onPressed: () {
+              final movieRepository = ref.read(movieRepositoryProvider);
+
               showSearch(
-                  context: context,
-                  delegate: SearchMovieDelegate(),
-                  query: "");
+                context: context,
+                delegate: SearchMovieDelegate(
+                    searchMovieCallBack: movieRepository.searchMovie,
+                    widgetRef: ref),
+                // delegate: //otra forma
+                //     SearchMovieDelegate(searchMovieCallBack: (query) {
+                //   return movieRepository.searchMovie(query);
+                // }),
+              );
             },
             icon: const Icon(Icons.search_rounded))
       ],
@@ -59,13 +70,21 @@ class CustomAppbar extends StatelessWidget {
   }
 }
 
+typedef SearchMovieCallBack = Future<List<Movie>> Function(String query);
+
 class SearchMovieDelegate extends SearchDelegate {
+  final SearchMovieCallBack searchMovieCallBack;
+  final WidgetRef widgetRef;
+
+  SearchMovieDelegate(
+      {required this.searchMovieCallBack, required this.widgetRef});
+
   @override
   String get searchFieldLabel {
     return "Buscar pelicula";
   }
 
-  @override
+  @override //Posicion derecha del appbar
   List<Widget>? buildActions(BuildContext context) {
     return [
       if (query != "")
@@ -78,7 +97,7 @@ class SearchMovieDelegate extends SearchDelegate {
     ];
   }
 
-  @override
+  @override //Posicion izquierda del appbar
   Widget? buildLeading(BuildContext context) {
     return IconButton(
       onPressed: () {
@@ -89,13 +108,60 @@ class SearchMovieDelegate extends SearchDelegate {
     );
   }
 
-  @override
+  @override //Contenido del centro como un placeholder en lo que espera un resultado
   Widget buildResults(BuildContext context) {
-    return const Text("Resultado ");
+    return const Text("Placeholder texto de prueba");
   }
 
+  //Cuando se llama el ShowSearch, y cada vez que escribo
   @override
   Widget buildSuggestions(BuildContext context) {
-    return const Center(child: Text("Sin resultados"));
+    if (query.trim() == "") {
+      return const Center(child: Text("Sin resultados"));
+    }
+
+    Future<List<Movie>> movieRepository =
+        widgetRef.read(movieRepositoryProvider).searchMovie(query);
+
+    return FutureBuilder(
+        // future: searchMovieCallBack(query),
+        // initialData: const [], //Data inicial
+        future: movieRepository,
+        builder: (context, snapshot) {
+          final List<Movie> movies = snapshot.data ?? [];
+          if (!snapshot.hasData) return const CircularProgressIndicator();
+
+          return ListView.builder(
+            itemCount: movies.length,
+            itemBuilder: (BuildContext context, int index) {
+              final movie = movies[index];
+
+              return ListTile(
+                onTap: () {
+                  context.push("/movieDetailsScreen/${movies[index].id}");
+                },
+                contentPadding: const EdgeInsets.only(left: 20),
+                leading: movie.posterPath != ""
+                    ? Image.network(
+                        movie.posterPath,
+                        width: 43,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        "assets/images/no-image-poster.png",
+                        width: 43,
+                        fit: BoxFit.cover,
+                      ),
+                title: Text(
+                  movie.title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: (movie.overview.length > 80)
+                    ? Text("${movie.overview.substring(0, 80)}...")
+                    : Text(movie.overview),
+              );
+            },
+          );
+        });
   }
 }

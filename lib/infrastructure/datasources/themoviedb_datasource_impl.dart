@@ -2,6 +2,7 @@
 //Si se cambia la fuente de dato /API (datasource) entonces se crea otro archivoos
 //Aqui se define el "Como" se obtiene la data para mmovieDB
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cinemapedia/config/constant/endpoints.dart';
@@ -110,21 +111,33 @@ class TheMovieDBDataSourceImpl extends MoviesDataSource {
     return movie;
   }
 
+  late Timer timer = Timer(Duration.zero, () {});
+
   @override
   Future<List<Movie>> searchMovie(String query) async {
-    Uri url = Uri.https(urlBase, Endpoints.getMoviesOnCartelera, {
+    if (timer.isActive) {
+      timer.cancel();
+    }
+
+    Uri url = Uri.https(urlBase, Endpoints.searchMovies, {
       "api_key": Enviroment.theMovieDBAPIKey,
       "language": "es-MX",
       "query": query
     });
-    final resp = await http.get(url);
-    final respJson = json.decode(resp.body);
-    final movieDbResponse = MovieDbResponse.fromJson(respJson);
-    final List<Movie> listMovieDb = movieDbResponse.results
-        // .where((movieDb) => movieDb.adult != true)
-        .map((e) => MovieMapper.movieDBModelToEntity(e))
-        .toList();
 
-    return listMovieDb;
+    Completer<List<Movie>> listMovieDbCompleter = Completer<List<Movie>>();
+
+    timer = Timer(const Duration(milliseconds: 700), () async {
+      final resp = await http.get(url);
+      final respJson = json.decode(resp.body);
+      final movieDbResponse = MovieDbResponse.fromJson(respJson);
+      final listMovieDb = movieDbResponse.results
+          // .where((movieDb) => movieDb.adult != true)
+          .map((e) => MovieMapper.movieDBModelToEntity(e))
+          .toList();
+      listMovieDbCompleter.complete(listMovieDb);
+      print("klk");
+    });
+    return listMovieDbCompleter.future;
   }
 }
