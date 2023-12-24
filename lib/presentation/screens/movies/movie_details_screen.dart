@@ -31,7 +31,7 @@ class MovieDetailsScreenState extends ConsumerState<MovieDetailsScreen> {
     final moviesMap = ref.watch(movieDetailsProvider);
     final Movie? movie = moviesMap[widget.movieId];
 
-    //rerotna en ele State un mapa con todas los actores consultados
+    //rerotna en el State un mapa con todas los actores consultados
     final actorsList = ref.watch(actorsProvider)[widget.movieId];
 
     if (movie == null || actorsList == null) {

@@ -109,4 +109,22 @@ class TheMovieDBDataSourceImpl extends MoviesDataSource {
 
     return movie;
   }
+
+  @override
+  Future<List<Movie>> searchMovie(String query) async {
+    Uri url = Uri.https(urlBase, Endpoints.getMoviesOnCartelera, {
+      "api_key": Enviroment.theMovieDBAPIKey,
+      "language": "es-MX",
+      "query": query
+    });
+    final resp = await http.get(url);
+    final respJson = json.decode(resp.body);
+    final movieDbResponse = MovieDbResponse.fromJson(respJson);
+    final List<Movie> listMovieDb = movieDbResponse.results
+        // .where((movieDb) => movieDb.adult != true)
+        .map((e) => MovieMapper.movieDBModelToEntity(e))
+        .toList();
+
+    return listMovieDb;
+  }
 }
