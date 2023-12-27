@@ -136,8 +136,8 @@ class TheMovieDBDataSourceImpl extends MoviesDataSource {
           .map((e) => MovieMapper.movieDBModelToEntity(e))
           .toList();
       listMovieDbCompleter.complete(listMovieDb);
-      print("klk");
     });
+
     return listMovieDbCompleter.future;
   }
 }
