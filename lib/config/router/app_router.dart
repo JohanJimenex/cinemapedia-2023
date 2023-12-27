@@ -1,3 +1,4 @@
+import 'package:cinemapedia/presentation/screens/test_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cinemapedia/presentation/screens/barril_screens.dart';
 
@@ -32,5 +33,11 @@ final appRouter = GoRouter(initialLocation: "/homeScreen", routes: [
         // return MovieDetailsScreen(movieId: movieId, movie: movie); //lo enviamos al constructor
 
         return MovieDetailsScreen(movieId: movieId);
+      }),
+  GoRoute(
+      path: "/test",
+      name: "test",
+      builder: (context, state) {
+        return TestScreen();
       }),
 ]);

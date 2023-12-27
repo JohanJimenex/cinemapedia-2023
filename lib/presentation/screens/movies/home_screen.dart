@@ -8,6 +8,7 @@ import 'package:cinemapedia/providers/movies/movies_swiper_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/providers/barril_providers.dart';
+import 'package:go_router/go_router.dart';
 // import 'package:cinemapedia/config/constant/enviroment_const.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -55,6 +56,12 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                   delegate: SliverChildListDelegate([
                 Column(
                   children: [
+                    TextButton(
+                      onPressed: () {
+                        context.push("/test");
+                      },
+                      child: const SizedBox(),
+                    ),
                     MovieSlidershow(
                         moviesToShow: moviesOnCarteleraForSwiper),
                     const Divider(

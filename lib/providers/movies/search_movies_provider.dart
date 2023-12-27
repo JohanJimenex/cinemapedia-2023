@@ -1,6 +1,8 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
-import 'package:cinemapedia/providers/barril_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cinemapedia/providers/barril_providers.dart';
+
+// final lastQuerySearchedProvider = StateProvider<String>((ref) => "");
 
 final searchMoviesProvider =
     StateNotifierProvider<SearchMoviesNotifier, List<Movie>>((ref) {
@@ -20,6 +22,6 @@ class SearchMoviesNotifier extends StateNotifier<List<Movie>> {
   Future<void> seatchMovies(String query) async {
     final List<Movie> resp = await callBackSeachMovie(query);
 
-    state = [...state, ...resp];
+    state = resp;
   }
 }

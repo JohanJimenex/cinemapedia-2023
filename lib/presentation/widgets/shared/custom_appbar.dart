@@ -1,16 +1,20 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/providers/barril_providers.dart';
+// import 'package:cinemapedia/providers/movies/search_movies_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomAppbar extends ConsumerWidget {
+  static String lastQuery = "";
   const CustomAppbar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
     final textStyle = Theme.of(context).textTheme;
+    // final movieRepository = ref.read(movieRepositoryProvider);
+    // final movieRepository = ref.watch(searchMoviesProvider.notifier).seatchMovies;
 
     return SliverAppBar(
       floating: true,
@@ -29,18 +33,23 @@ class CustomAppbar extends ConsumerWidget {
       actions: [
         IconButton(
             onPressed: () {
-              final movieRepository = ref.read(movieRepositoryProvider);
-
+              // context.push("/TestScreen");
+              // context.go("/TestScreen");
+              // ref.read(lastQuerySearchedProvider.notifier).state =
+              //     lastQuery;
               showSearch(
-                context: context,
-                delegate: SearchMovieDelegate(
-                    searchMovieCallBack: movieRepository.searchMovie,
-                    widgetRef: ref),
-                // delegate: //otra forma
-                //     SearchMovieDelegate(searchMovieCallBack: (query) {
-                //   return movieRepository.searchMovie(query);
-                // }),
-              );
+                  context: context,
+                  delegate: SearchMovieDelegate(
+                    // searchMovieCallBack: movieRepository.seatchMovies,
+                    widgetRef: ref,
+                  ),
+                  query: lastQuery);
+
+              //   // delegate: //otra forma
+              //   //     SearchMovieDelegate(searchMovieCallBack: (query) {
+              //   //   return movieRepository.searchMovie(query);
+              //   // }),
+              // );
             },
             icon: const Icon(Icons.search_rounded))
       ],
@@ -70,14 +79,16 @@ class CustomAppbar extends ConsumerWidget {
   }
 }
 
-typedef SearchMovieCallBack = Future<List<Movie>> Function(String query);
+typedef SearchMovieCallBack = Future<void> Function(String query);
 
 class SearchMovieDelegate extends SearchDelegate {
-  final SearchMovieCallBack searchMovieCallBack;
+  // final SearchMovieCallBack searchMovieCallBack;
   final WidgetRef widgetRef;
 
   SearchMovieDelegate(
-      {required this.searchMovieCallBack, required this.widgetRef});
+      {
+      // required this.searchMovieCallBack,
+      required this.widgetRef});
 
   @override
   String get searchFieldLabel {
@@ -108,14 +119,16 @@ class SearchMovieDelegate extends SearchDelegate {
     );
   }
 
-  @override //Contenido del centro como un placeholder en lo que espera un resultado
+  @override //Se muestra cuando se hace Enter
   Widget buildResults(BuildContext context) {
     return const Text("Placeholder texto de prueba");
   }
 
-  //Cuando se llama el ShowSearch, y cada vez que escribo
+  //Cuando se llama el ShowSearch, y cada vez que escribo, se muestra como suegrencias
   @override
   Widget buildSuggestions(BuildContext context) {
+    CustomAppbar.lastQuery = query;
+
     if (query.trim() == "") {
       return const Center(child: Text("Sin resultados"));
     }
@@ -129,7 +142,10 @@ class SearchMovieDelegate extends SearchDelegate {
         future: movieRepository,
         builder: (context, snapshot) {
           final List<Movie> movies = snapshot.data ?? [];
-          if (!snapshot.hasData) return const CircularProgressIndicator();
+
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
           return ListView.builder(
             itemCount: movies.length,
@@ -138,7 +154,7 @@ class SearchMovieDelegate extends SearchDelegate {
 
               return ListTile(
                 onTap: () {
-                  context.push("/movieDetailsScreen/${movies[index].id}");
+                  context.push("/movieDetailsScreen/${movie.id}");
                 },
                 contentPadding: const EdgeInsets.only(left: 20),
                 leading: movie.posterPath != ""
