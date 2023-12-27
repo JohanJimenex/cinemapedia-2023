@@ -1,9 +1,9 @@
-import 'package:cinemapedia/domain/entities/movie.dart';
-import 'package:cinemapedia/presentation/widgets/actors/actors_horizontal_listview.dart';
-import 'package:cinemapedia/providers/actors/actors_provider.dart';
-import 'package:cinemapedia/providers/movies/movie_details_provider.dart';
+import 'package:cinemapedia/presentation/widgets/barril_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/providers/barril_providers.dart';
+import 'package:cinemapedia/presentation/widgets/actors/actors_horizontal_listview.dart';
 
 class MovieDetailsScreen extends ConsumerStatefulWidget {
   static const String nameOfScreen = "MovieDetailsScreen";

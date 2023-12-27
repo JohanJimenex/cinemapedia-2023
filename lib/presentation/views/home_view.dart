@@ -1,30 +1,21 @@
-// import 'dart:math';
-
-import 'package:cinemapedia/presentation/widgets/barril_widgets.dart';
-import 'package:cinemapedia/presentation/widgets/movies/movie_horizontal_listview.dart';
-import 'package:cinemapedia/presentation/widgets/movies/movie_slidershow.dart';
-import 'package:cinemapedia/presentation/widgets/shared/full_screen_loader.dart';
-import 'package:cinemapedia/providers/movies/movies_swiper_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/providers/barril_providers.dart';
-import 'package:go_router/go_router.dart';
-// import 'package:cinemapedia/config/constant/enviroment_const.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:cinemapedia/presentation/widgets/barril_widgets.dart';
 
-//Convertimos un StefulWidget a un ConsumeStefulWidget de Riverpod,
-//as podemos usar la el metodo iniState() para inciializar cosas, ademas poder usar la variable "ref" sin tener que pasarlo por el build "WidgetRef ref" ,
+// Convertimos un StefulWidget a un ConsumeStefulWidget de Riverpod,
+// asi podemos usar el metodo iniState() para inciializar cosas, ademas poder usar la variable "ref" sin tener que pasarlo por el build "WidgetRef ref" ,
 // pudieramos usar la otra fomra de ConsumerWidget parta StalessWidget pero tendriamos que pasarle la referencia por el build(context, ref)
-class HomeScreen extends ConsumerStatefulWidget {
-  static String nameOfScreen = "HomeScreen";
 
-  const HomeScreen({super.key});
+class HomeView extends ConsumerStatefulWidget {
+  const HomeView({super.key});
 
   @override
-  HomeScreenState createState() => HomeScreenState();
+  HomeViewState createState() => HomeViewState();
 }
 
-class HomeScreenState extends ConsumerState<HomeScreen> {
+class HomeViewState extends ConsumerState<HomeView> {
   @override
   void initState() {
     super.initState();
@@ -42,25 +33,22 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
     final upComingMovies = ref.watch(upComingMoviesProvider);
 
-    return Scaffold(
-      // body: Center(child: Text(Enviroment.theMovieDBAPIKey)),
-      //se cambio por una clase y constante para usar el .nombrePropiedad
-      // body: Center(child: Text(dotenv.env["THE_MOVIEDB_API_KEY"] ?? "No existe API KEY")),// ,
-      body: moviesOnCarteleraForSwiper.isEmpty
-          // ? const Center(child: CircularProgressIndicator())
-          ? const FullScreenLoader()
-          : CustomScrollView(slivers: [
-              const CustomAppbar(),
-              SliverList(
-                  // delegate: SliverChildBuilderDelegate((context, index) {  return
-                  delegate: SliverChildListDelegate([
+    return moviesOnCarteleraForSwiper.isEmpty
+        // ? const Center(child: CircularProgressIndicator())
+        ? const FullScreenLoader()
+        : CustomScrollView(slivers: [
+            const CustomAppbar(),
+            SliverList(
+              // delegate: SliverChildBuilderDelegate((context, index) {  return //forma d efernando herrera
+              delegate: SliverChildListDelegate([
                 Column(
                   children: [
                     TextButton(
                       onPressed: () {
                         context.push("/test");
                       },
-                      child: const SizedBox(),
+                      // child: const SizedBox(),
+                      child: const Text("."),
                     ),
                     MovieSlidershow(
                         moviesToShow: moviesOnCarteleraForSwiper),
@@ -115,14 +103,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ],
                 )
-              ])
-
-                  // }, childCount: 1)
-
-                  )
-            ]),
-
-      bottomNavigationBar: const CustomNavigationbar(),
-    );
+              ]),
+            )
+          ]);
   }
 }
