@@ -1,5 +1,9 @@
+import 'package:cinemapedia/presentation/views/favorites_movies_view.dart';
+import 'package:cinemapedia/presentation/views/home_view.dart';
+import 'package:cinemapedia/providers/page_index_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cinemapedia/presentation/widgets/barril_widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:cinemapedia/config/constant/enviroment_const.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -8,15 +12,25 @@ import 'package:cinemapedia/presentation/widgets/barril_widgets.dart';
 // se cambio por una clase y constante para usar el .nombrePropiedad
 // body: Center(child: Text(dotenv.env["THE_MOVIEDB_API_KEY"] ?? "No existe API KEY")),// ,
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   static String nameOfScreen = "HomeScreen";
-  final Widget view; //HomeView, FavoritesView, etc. desde GoRouter
+  // final Widget view; //HomeView, FavoritesView, etc. desde GoRouter, esto se usa solo si usamos  ShellRouter de GotRouter,
 
-  const HomeScreen({super.key, required this.view});
+  const HomeScreen({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    int indexOfView = ref.watch(pageIndexProvider);
+
     return Scaffold(
-      body: view,
+      body: IndexedStack(
+        index: indexOfView,
+        children: const [
+          HomeView(),
+          HomeView(),
+          FavoriteMoviesView(),
+        ],
+      ),
       bottomNavigationBar: const CustomNavigationbar(),
     );
   }

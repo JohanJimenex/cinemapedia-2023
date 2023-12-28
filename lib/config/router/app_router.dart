@@ -8,49 +8,51 @@ final appRouter = GoRouter(initialLocation: "/", routes: [
   //Con este shellRoute podemos usar el bottonNav igationBar sin que se quite al ingresar a una nueva pantalla
   //Tambien sigue funcionando si las rutas estan fuera del shell router, ej: TestScreen
 
-  ShellRoute(
-      //En el child viene la ruta que se ha llamado, ejemplo "/" viene HomeView, "/movieDetailScren" viene MovieDetailsScreen, etc
-      builder: (context, state, child) {
-        return HomeScreen(view: child);
-      },
-      routes: [
-        GoRoute(
-            path: "/",
-            builder: (context, state) => const HomeView(),
-            routes: [
-              GoRoute(
-                  //Recuerda que si vas  ausarlo en la web, y queires que sea como una ruta hija con Ejemplo: home/etc. puedes meterla dentro y quitar el slash /
-                  path: "movieDetailsScreen/:id",
-                  name: MovieDetailsScreen.nameOfScreen,
-                  builder: (context, state) {
-                    String movieId = state.pathParameters["id"] ?? "";
-                    return MovieDetailsScreen(movieId: movieId);
-                  }),
-            ]),
-        GoRoute(
-          path: "/favorites",
-          builder: (context, state) => const FavoriteMoviesView(),
-        ),
-      ]),
-
-  // GoRoute(
-  //     path: "/", //ruta
-  //     name: HomeScreen
-  //         .nameOfScreen, //nombre de la ruta para poder llamarla por nombre
-  //     builder: (context, state) => const HomeScreen(
-  //           view: HomeView(),
-  //         ), //Componente a cargar
-  //     //Con esta configuracion de rutas hijas es para que en la web si actualiza la pagina siga apareciendo el boton de "Back",
-  //     //Recuerda quitar el slash del path
+  // ShellRoute(
+  //     //En el child viene la ruta que se ha llamado, ejemplo "/" viene HomeView, "/movieDetailScren" viene MovieDetailsScreen, etc
+  //     builder: (context, state, child) {
+  //       return HomeScreen(view: child);
+  //     },
   //     routes: [
   //       GoRoute(
-  //           path: "movieDetailsScreen/:id",
-  //           name: MovieDetailsScreen.nameOfScreen,
-  //           builder: (context, state) {
-  //             String movieId = state.pathParameters["id"] ?? "";
-  //             return MovieDetailsScreen(movieId: movieId);
-  //           })
+  //           path: "/",
+  //           builder: (context, state) => const HomeView(),
+  //           routes: [
+  //             GoRoute(
+  //                 //Recuerda que si vas  ausarlo en la web, y queires que sea como una ruta hija con Ejemplo: home/etc. puedes meterla dentro y quitar el slash /
+  //                 path: "movieDetailsScreen/:id",
+  //                 name: MovieDetailsScreen.nameOfScreen,
+  //                 builder: (context, state) {
+  //                   String movieId = state.pathParameters["id"] ?? "";
+  //                   return MovieDetailsScreen(movieId: movieId);
+  //                 }),
+  //           ]),
+  //       GoRoute(
+  //         path: "/favorites",
+  //         builder: (context, state) => const FavoriteMoviesView(),
+  //       ),
   //     ]),
+
+  GoRoute(
+      path: "/", //ruta
+      name: HomeScreen
+          .nameOfScreen, //nombre de la ruta para poder llamarla por nombre
+      builder: (context, state) => HomeScreen(), //Componente a cargar
+      //Con esta configuracion de rutas hijas es para que en la web si actualiza la pagina siga apareciendo el boton de "Back",
+      //Recuerda quitar el slash del path
+      routes: [
+        GoRoute(
+            path: "movieDetailsScreen/:id",
+            name: MovieDetailsScreen.nameOfScreen,
+            builder: (context, state) {
+              String movieId = state.pathParameters["id"] ?? "";
+              return MovieDetailsScreen(movieId: movieId);
+            }),
+      ]),
+  GoRoute(
+    path: "/favorites",
+    builder: (context, state) => const FavoriteMoviesView(),
+  ),
 
   // GoRoute(
   //     path: "/movieDetailsScreen/:id", //ruta
