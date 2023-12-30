@@ -9,9 +9,11 @@ import 'package:cinemapedia/config/constant/endpoints.dart';
 import 'package:cinemapedia/config/constant/enviroment_const.dart';
 import 'package:cinemapedia/domain/datasources/movies_datasource.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/domain/entities/video.dart';
 import 'package:cinemapedia/infrastructure/mappers/movie_mapper.dart';
 import 'package:cinemapedia/infrastructure/models/moviedb/movie_details_repsonse.dart';
 import 'package:cinemapedia/infrastructure/models/moviedb/moviedb_response.dart';
+import 'package:cinemapedia/infrastructure/models/moviedb/videosyt_response.dart';
 import 'package:http/http.dart' as http;
 
 class TheMovieDBDataSourceImpl extends MoviesDataSource {
@@ -139,5 +141,25 @@ class TheMovieDBDataSourceImpl extends MoviesDataSource {
     });
 
     return listMovieDbCompleter.future;
+  }
+
+  @override
+  Future<List<Video>> getYoutubeVideosByMovieId(String movieId) async {
+    final Uri url = Uri.https(
+      urlBase,
+      Endpoints.getVideoTrailerByMovieId
+          .replaceFirst("{movieId}", movieId),
+      {"api_key": Enviroment.theMovieDBAPIKey},
+    );
+
+    final request = await http.get(url);
+    final jsonRepsonse = await jsonDecode(request.body);
+    final VideoYtRepsonse videoYTResponse =
+        VideoYtRepsonse.fromJson(jsonRepsonse);
+
+    final List<Video> videos = videoYTResponse.results
+        .map((e) => MovieMapper.videoModelToEntity(e))
+        .toList();
+    return videos;
   }
 }

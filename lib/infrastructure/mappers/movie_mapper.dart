@@ -1,8 +1,10 @@
 //El objetivo de este mapper/clase, es leer diferentes modelos y crear/mapearlos con nuestra entidad
 //LA idea es crear un mapper para cada modelo diferente, si viene de moviedb, netflixdb u otro poder mapear cada uno con nuestra entidad
 import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/domain/entities/video.dart';
 import 'package:cinemapedia/infrastructure/models/moviedb/movie_details_repsonse.dart';
 import 'package:cinemapedia/infrastructure/models/moviedb/movie_moviedb.dart';
+import 'package:cinemapedia/infrastructure/models/moviedb/videosyt_response.dart';
 
 class MovieMapper {
   static Movie movieDBModelToEntity(MovieMovieDB movieDbModel) => Movie(
@@ -50,6 +52,12 @@ class MovieMapper {
         voteCount: movieDetails.voteCount);
 
     return movieDB;
+  }
+
+  static Video videoModelToEntity(VideoResult videoRepsonse) {
+    final Video videoEntity = Video(videoId: videoRepsonse.key);
+
+    return videoEntity;
   }
 
   //otro mapper par aNetfliz por ejemplo

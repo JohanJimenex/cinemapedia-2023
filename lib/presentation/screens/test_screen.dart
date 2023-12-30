@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/providers/test_provider.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class TestScreen extends ConsumerStatefulWidget {
   const TestScreen({super.key});
@@ -10,10 +11,35 @@ class TestScreen extends ConsumerStatefulWidget {
 }
 
 class TestScreenState extends ConsumerState<TestScreen> {
+  late final YoutubePlayerController controller;
+  late final YoutubePlayerController controllerFernando;
+
   @override
   void initState() {
     super.initState();
     ref.read(conPeajeProvider.notifier).miMetodoX();
+    controller = YoutubePlayerController(
+      initialVideoId: '0kQ8i2FpRDk',
+      flags: const YoutubePlayerFlags(
+        autoPlay: false,
+        mute: true,
+      ),
+    );
+
+    controllerFernando = YoutubePlayerController(
+      initialVideoId: "0kQ8i2FpRDk",
+      flags: const YoutubePlayerFlags(
+        hideThumbnail: false,
+        showLiveFullscreenButton: false,
+        mute: false,
+        autoPlay: false,
+        disableDragSeek: true,
+        loop: false,
+        isLive: false,
+        forceHD: false,
+        enableCaption: false,
+      ),
+    );
   }
 
   @override
@@ -28,6 +54,16 @@ class TestScreenState extends ConsumerState<TestScreen> {
         ref.read(peticionHttpAPIProvider).getNowPlaying();
     final elPeaje = ref.watch(conPeajeProvider);
 
+// ==============YOUTUBE PLAYER===========================================================
+
+    YoutubePlayer(
+      controller: controller,
+      showVideoProgressIndicator: true,
+      // videoProgressIndicatorColor: Colors.amber,
+      progressColors: const ProgressBarColors(backgroundColor: Colors.red),
+      onReady: () {},
+    );
+// =====================================================================================
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -36,6 +72,8 @@ class TestScreenState extends ConsumerState<TestScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              YoutubePlayer(controller: controller),
+              YoutubePlayer(controller: controllerFernando),
               FutureBuilder(
                 future: peliculasEnCartelera,
                 initialData: const [],

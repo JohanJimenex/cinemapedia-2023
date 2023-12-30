@@ -1,4 +1,5 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/domain/entities/video.dart';
 
 //El reposotirio es quein llama al Datasource
 // porque en el repositorio podemos cambiar el datasource
@@ -19,4 +20,6 @@ abstract class MoviesRepository {
   Future<Movie> getMovieDetails(String movieId);
 
   Future<List<Movie>> searchMovie(String query);
+
+  Future<List<Video>> getYoutubeVideosByMovieId(String movieId);
 }

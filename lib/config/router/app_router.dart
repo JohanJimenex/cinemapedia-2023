@@ -37,7 +37,8 @@ final appRouter = GoRouter(initialLocation: "/", routes: [
       path: "/", //ruta
       name: HomeScreen
           .nameOfScreen, //nombre de la ruta para poder llamarla por nombre
-      builder: (context, state) => HomeScreen(), //Componente a cargar
+      builder: (context, state) =>
+          const HomeScreen(), //Componente a cargar
       //Con esta configuracion de rutas hijas es para que en la web si actualiza la pagina siga apareciendo el boton de "Back",
       //Recuerda quitar el slash del path
       routes: [

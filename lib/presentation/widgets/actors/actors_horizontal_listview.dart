@@ -11,57 +11,65 @@ class ActorListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 350,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: actorsList!.length,
-        itemBuilder: (BuildContext context, int index) {
-          final Actor actor = actorsList![index];
+    return Column(
+      children: [
+        const Text(
+          "Casting",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 350,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: actorsList!.length,
+            itemBuilder: (BuildContext context, int index) {
+              final Actor actor = actorsList![index];
 
-          return Container(
-            padding: const EdgeInsets.all(5),
-            width: 120,
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: actor.profilePath == ""
-                      ? Image.asset(
-                          "assets/images/no-image-poster.png",
-                          height: 150,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.network(
-                          actor.profilePath,
-                          fit: BoxFit.cover,
-                          height: 150,
-                        ),
+              return Container(
+                padding: const EdgeInsets.all(5),
+                width: 120,
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: actor.profilePath == ""
+                          ? Image.asset(
+                              "assets/images/no-image-poster.png",
+                              height: 150,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              actor.profilePath,
+                              fit: BoxFit.cover,
+                              height: 150,
+                            ),
+                    ),
+                    Text(
+                      actor.name,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                    ),
+                    actor.character == null
+                        ? const SizedBox()
+                        : Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.amber),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Text(
+                              actor.character!,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                  ],
                 ),
-                Text(
-                  actor.name,
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-                actor.character == null
-                    ? const SizedBox()
-                    : Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.amber),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Text(
-                          actor.character!,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-              ],
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

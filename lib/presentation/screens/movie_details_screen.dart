@@ -1,4 +1,10 @@
+import 'package:cinemapedia/domain/entities/video.dart';
 import 'package:cinemapedia/presentation/widgets/barril_widgets.dart';
+import 'package:cinemapedia/presentation/widgets/movies/youtube_player.dart';
+import 'package:cinemapedia/providers/localdb/favorites_movies_provider.dart';
+import 'package:cinemapedia/providers/localdb/is_favorite_movie_provider.dart';
+import 'package:cinemapedia/providers/localdb/localdb_repository_provider.dart';
+import 'package:cinemapedia/providers/movies/videoyt_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
@@ -24,6 +30,7 @@ class MovieDetailsScreenState extends ConsumerState<MovieDetailsScreen> {
 
     ref.read(movieDetailsProvider.notifier).loadMovie(widget.movieId);
     ref.read(actorsProvider.notifier).getActorsByMovies(widget.movieId);
+    // ref.read(videoYTProvider(widget.movieId));
   }
 
   @override
@@ -33,6 +40,7 @@ class MovieDetailsScreenState extends ConsumerState<MovieDetailsScreen> {
 
     //rerotna en el State un mapa con todas los actores consultados
     final actorsList = ref.watch(actorsProvider)[widget.movieId];
+    final video = ref.watch(videoYTProvider(widget.movieId));
 
     if (movie == null || actorsList == null) {
       return const Center(child: CircularProgressIndicator());
@@ -76,6 +84,13 @@ class MovieDetailsScreenState extends ConsumerState<MovieDetailsScreen> {
                         ? "No hay descripción"
                         : movie.overview),
                   ),
+                  video.when(data: (resp) {
+                    return YoutubeVideoPlayer(listVideos: resp);
+                  }, error: (_, __) {
+                    return const Text("Error al cargar el trailer");
+                  }, loading: () {
+                    return const Text("Cargando trailer...");
+                  }),
                   ActorListView(actorsList: actorsList),
                   const SizedBox(height: 100),
                 ],
@@ -113,24 +128,85 @@ class CustomBadge extends StatelessWidget {
   }
 }
 
-class _SliverAppBar extends StatelessWidget {
+class _SliverAppBar extends ConsumerStatefulWidget {
   final Movie? movie;
 
   const _SliverAppBar({required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  _SliverAppBarState createState() => _SliverAppBarState();
+}
+
+class _SliverAppBarState extends ConsumerState<_SliverAppBar> {
+  late bool isFavorite;
+
+  @override
+  void initState() {
+    checkIfMovieIsInFavorite();
+    super.initState();
+  }
+
+  checkIfMovieIsInFavorite() async {
+    final bool resp = await ref
+        .read(localDBRepositoryProvider)
+        .isMovieInFavorite(widget.movie!.id);
+
+    ref.read(isFavoriteMovieProvider.notifier).state = resp;
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     final screenSize = MediaQuery.of(context).size;
+    bool isFavorite = ref.watch(isFavoriteMovieProvider);
+
     return SliverAppBar(
+      actions: [
+        Ink(
+          decoration: ShapeDecoration(
+            shape: const CircleBorder(),
+            shadows: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 15,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: IconButton(
+            icon: isFavorite
+                ? const Icon(Icons.favorite, color: Colors.red)
+                : const Icon(Icons.favorite_border),
+            color: Colors.white,
+            onPressed: () async {
+              await ref
+                  .read(localDBRepositoryProvider)
+                  .toggleFavorite(widget.movie!);
+
+              final bool isFavorite = await ref
+                  .read(localDBRepositoryProvider)
+                  .isMovieInFavorite(widget.movie!.id);
+
+              ref.read(isFavoriteMovieProvider.notifier).state =
+                  isFavorite;
+
+              await ref
+                  .read(favoriteMoviesProvider.notifier)
+                  .updateFavoritesMovies();
+            },
+          ),
+        )
+      ],
       backgroundColor: Colors.black,
       // expandedHeight: screenSize.height / 1.5,
       expandedHeight: screenSize.height * 0.65,
       foregroundColor: Colors.white, //color para la flechita
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.all(0),
-        background: movie!.posterPath == ""
+        background: widget.movie!.posterPath == ""
             ? Image.asset("assets/images/no-image-poster.png")
-            : Image.network(movie!.posterPath),
+            : Image.network(widget.movie!.posterPath),
         expandedTitleScale: 1,
         title: Stack(alignment: Alignment.bottomCenter, children: [
           const SizedBox.expand(
@@ -151,7 +227,7 @@ class _SliverAppBar extends StatelessWidget {
                       begin: Alignment(0, 0.9),
                       end: Alignment(0, 0),
                       colors: [Colors.black87, Colors.black45])),
-              child: Center(child: Text(movie!.title)),
+              child: Center(child: Text(widget.movie!.title)),
             ),
           ),
         ]),

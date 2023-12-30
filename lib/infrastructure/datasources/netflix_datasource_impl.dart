@@ -6,6 +6,7 @@
 
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/domain/datasources/movies_datasource.dart';
+import 'package:cinemapedia/domain/entities/video.dart';
 
 // import 'dart:convert';
 // import 'package:cinemapedia/config/constant/endpoints.dart';
@@ -60,6 +61,12 @@ class NetflixDatasource extends MoviesDataSource {
 
   @override
   Future<List<Movie>> searchMovie(String query) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Video>> getYoutubeVideosByMovieId(String movieId) {
+    // TODO: implement getYoutubeVideosByMovieId
     throw UnimplementedError();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/domain/entities/video.dart';
 
 //usamos una clase abstracta para definir las reglas que tendra quien implemente clase, que serian las impleemntacinoes de Datasources
 
@@ -18,4 +19,6 @@ abstract class MoviesDataSource {
   Future<Movie> getMovieDetails(String movieId);
 
   Future<List<Movie>> searchMovie(String query);
+
+  Future<List<Video>> getYoutubeVideosByMovieId(String movieId);
 }

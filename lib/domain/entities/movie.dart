@@ -2,7 +2,15 @@
 //Si la API X no tiene algunas de estas propiedades pues se manejaran como opcional o algun dato por defecto
 //Se hace con el fin de que si el API cambia algunas propiedades solo hay que cambiarla en el mapper que usa/mapea esta clase
 // ejemplo: si en la repsuesta de la API viene "forAdult" en vex de "adult" pues con el mapper lo mapeamos
+import 'package:isar/isar.dart';
+
+part 'movie.g.dart'; //Esto es para que ISAR genere un archivo que necesita de manera automatica,
+
+//ejecutar flutter pub run build_runner build, Se creara el eschema MovieSchema en alrchivo movie.g.dart
+@collection //Esto es para usar el paquete de la base de datos no SQL ISAR
 class Movie {
+  Id? isarId; //Lo pongo opcional para no dañar los que dependen de esa entidad, ademas Isar lo va asignar
+  // Id isarId = Isar.autoIncrement; //Otra forma
   final bool adult;
   final String backdropPath;
   final List<String> genreIds;

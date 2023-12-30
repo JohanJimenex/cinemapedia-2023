@@ -6,4 +6,5 @@ class Endpoints {
   static String getMovieDetails = "/3/movie/{movieId}";
   static String getActorsByMovie = "/3/movie/{movieId}/credits";
   static String searchMovies = "/3/search/movie";
+  static String getVideoTrailerByMovieId = "/3/movie/{movieId}/videos";
 }
