@@ -1,4 +1,3 @@
-import 'package:cinemapedia/domain/entities/video.dart';
 import 'package:cinemapedia/presentation/widgets/barril_widgets.dart';
 import 'package:cinemapedia/presentation/widgets/movies/youtube_player.dart';
 import 'package:cinemapedia/providers/localdb/favorites_movies_provider.dart';
@@ -227,7 +226,11 @@ class _SliverAppBarState extends ConsumerState<_SliverAppBar> {
                       begin: Alignment(0, 0.9),
                       end: Alignment(0, 0),
                       colors: [Colors.black87, Colors.black45])),
-              child: Center(child: Text(widget.movie!.title)),
+              child: Center(
+                  child: Text(
+                widget.movie!.title,
+                textAlign: TextAlign.center,
+              )),
             ),
           ),
         ]),

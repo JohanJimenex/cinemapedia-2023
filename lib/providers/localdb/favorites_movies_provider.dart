@@ -25,12 +25,13 @@ class FavoriteMoviesNotifier extends StateNotifier<List<Movie>> {
   }
 
   Future<void> updateFavoritesMovies() async {
-    final movies = await localDbRepository.loadMovies();
-    offset = 0;
+    // final movies = await localDbRepository.loadMovies();
     //esto remueve un objeto si usaramos objetos en el estado o recibimos parametro en el meotod
     // state.remove(value); mas detalles en el video de fernando
+    // state = [...movies];
 
-    state = [...movies];
+    offset = 0;
+    state.clear();
 
     loadNextPage();
   }
