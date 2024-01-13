@@ -44,7 +44,7 @@ class TestScreenState extends ConsumerState<TestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String saludo = ref.read(stringProviderUnaSoloLectura);
+    final String saludo = ref.read(stringProviderSoloLectura);
     int numero = ref.watch(intProviderCambiarEstadoYEstarPendiente);
     List<int> listNumeros = ref.watch(listNumerosProvider);
     final claseX = ref.read(claseXProvider);
@@ -53,6 +53,13 @@ class TestScreenState extends ConsumerState<TestScreen> {
     final peliculasEnCartelera =
         ref.read(peticionHttpAPIProvider).getNowPlaying();
     final elPeaje = ref.watch(conPeajeProvider);
+
+    //Es igual al .watch pero nos permite rejugar mas
+    ref.listen(intProviderCambiarEstadoYEstarPendiente,
+        (actualValue, newValue) {
+      print(actualValue);
+      print(newValue);
+    });
 
 // ==============YOUTUBE PLAYER===========================================================
 
