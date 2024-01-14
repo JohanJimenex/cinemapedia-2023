@@ -43,13 +43,14 @@ class HomeViewState extends ConsumerState<HomeView> {
               delegate: SliverChildListDelegate([
                 Column(
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        context.push("/test");
-                      },
-                      // child: const SizedBox(),
-                      child: const Text("."),
-                    ),
+                    //Lleva a la pantalla de pruebas
+                    // TextButton(
+                    //   onPressed: () {
+                    //     context.push("/test");
+                    //   },
+                    //   // child: const SizedBox(),
+                    //   child: const Text("."),
+                    // ),
                     MovieSlidershow(
                         moviesToShow: moviesOnCarteleraForSwiper),
                     const Divider(
