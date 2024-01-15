@@ -56,10 +56,7 @@ class TestScreenState extends ConsumerState<TestScreen> {
 
     //Es igual al .watch pero nos permite rejugar mas
     ref.listen(intProviderCambiarEstadoYEstarPendiente,
-        (actualValue, newValue) {
-      print(actualValue);
-      print(newValue);
-    });
+        (actualValue, newValue) {});
 
 // ==============YOUTUBE PLAYER===========================================================
 
