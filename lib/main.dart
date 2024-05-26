@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter,
-      title: 'Cinemapedia',
+      title: 'Info Movie',
       theme: AppTheme().getTheme(),
     );
   }
